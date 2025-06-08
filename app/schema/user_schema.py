@@ -18,3 +18,9 @@ class UserSchema (Schema):
         validate=lambda x: len(x) > 4,
         error_messages= {"error": "La contraseña necesita mínimo 5 carácteres."}
     )
+    
+    status = fields.Str(
+        required=True,
+        validate= lambda x: len(x) > 0,
+        error_messages={"error": "El estado es requerido."}
+    )
