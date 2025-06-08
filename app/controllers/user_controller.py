@@ -1,7 +1,8 @@
 from flask import Blueprint, request, jsonify
 from app.models.user_model import User
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from bson import ObjectId
 from app import mongo
 
 user_bp = Blueprint("users", __name__, url_prefix="/users")
@@ -59,3 +60,14 @@ def login_user():
     return jsonify({
         "access_token": access_token
     })
+    
+@user_bp.route("/delete", methods=["DELETE"])
+@jwt_required()
+def delete_user(): 
+    user_id = get_jwt_identity()
+    
+    mongo.db.users.delete_one({"_id": ObjectId(user_id)})
+    
+    return jsonify({
+        "msg" : "Usuario eliminado."
+    }), 200
