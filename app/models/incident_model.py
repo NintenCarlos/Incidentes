@@ -21,5 +21,5 @@ class Incident (IncidentSchema):
             name=data.get("name"),
             description=data.get("description"),
             status=data.get("status"),
-            password=data.get("password")
+            place=data.get("place")
         )    

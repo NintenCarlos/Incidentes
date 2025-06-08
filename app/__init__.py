@@ -23,10 +23,12 @@ def create_app():
     from app.controllers.user_controller import user_bp
     from app.controllers.incident_controller import incident_bp
     from app.controllers.team_controller import team_bp
+    from app.controllers.historial_controller import historial_bp
     
     app.register_blueprint(user_bp)
     app.register_blueprint(incident_bp)
     app.register_blueprint(team_bp)
+    app.register_blueprint(historial_bp)
     
     CORS(app)    
     

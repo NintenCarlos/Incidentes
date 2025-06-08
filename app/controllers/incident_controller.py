@@ -12,15 +12,15 @@ def create_incident():
     
     name = data.get("name")
     description = data.get("description")
-    status = data.get("status")
     place = data.get("place")
     
-    if not name or not description or not status or not place: 
+    if not name or not description or not place: 
         return jsonify({
             "error" : "Faltan atributos."
         }), 400
         
     new_incident = Incident.from_dict(data)
+    new_incident.status = "pending"
     
     incident = mongo.db.incidents.insert_one(new_incident.to_dict())
     
@@ -98,10 +98,9 @@ def update_incident(incident_id):
     
     name = data.get("name")
     description = data.get("description")
-    status = data.get("status")
     place = data.get("place")
     
-    if not name or not description or not status or not place: 
+    if not name or not description or not place: 
         return jsonify({
             'error': 'Faltan atributos.'
         }), 400
@@ -119,7 +118,7 @@ def update_incident(incident_id):
             "_id": ObjectId(incident_id)},
             {"$set": {"name": name,
                       "description": description,
-                      "status": status,
+                      "status": incident["status"],
                       "place": place
                       }})
     
@@ -145,7 +144,7 @@ def delete_incident(inserted_id):
         
     if incident["status"] == "pending": 
         return jsonify({
-            "error": "No se puede borrar un incidente, sino está resuelto."
+            "error": "No se puede borrar un incidente sino está resuelto."
         }), 400
         
     mongo.db.incidents.delete_one({
